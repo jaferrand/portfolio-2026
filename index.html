@@ -75,6 +75,7 @@
             position: sticky; top: 0; height: 100vh;
             display: flex; flex-direction: column; justify-content: space-between;
             z-index: 100; box-shadow: 5px 0 30px rgba(0,0,0,0.6);
+            overflow-y: auto;
         }
 
         .brand-area { margin-bottom: 20px; }
@@ -247,10 +248,10 @@
         }
         .edu-chip {
             background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
-            padding: 10px 20px; border-radius: 4px; display: flex; align-items: center; gap: 10px;
-            font-size: 0.9rem; color: #cbd5e1;
+            padding: 20px 28px; border-radius: 4px; display: flex; align-items: flex-start; gap: 16px;
+            font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;
         }
-        .edu-chip i { color: var(--neon-cyan); width: 16px; height: 16px; }
+        .edu-chip i { color: var(--neon-cyan); width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; }
 
         /* Chip Anthropic destacado */
         .edu-chip-anthropic {
@@ -264,6 +265,20 @@
         }
         .edu-chip-anthropic a:hover { opacity: 1; text-decoration: underline; }
         .edu-chip-anthropic i { color: var(--neon-cyan); width: 16px; height: 16px; }
+
+        .contact-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+        .contact-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 11px 16px; border-radius: 4px; text-decoration: none;
+            font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem;
+            letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s;
+        }
+        .btn-wsp { background: rgba(37, 211, 102, 0.12); border: 1px solid #25d366; color: #25d366; }
+        .btn-wsp:hover { background: #25d366; color: #000; box-shadow: 0 0 15px #25d366; }
+        .btn-linkedin { background: rgba(10, 102, 194, 0.12); border: 1px solid #0a66c2; color: #5aa9e6; }
+        .btn-linkedin:hover { background: #0a66c2; color: #fff; box-shadow: 0 0 15px #0a66c2; }
+        .btn-web { background: rgba(0, 243, 255, 0.06); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
+        .btn-web:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
 
         .scroll-top-btn {
             position: fixed; bottom: 30px; right: 20px; width: 50px; height: 50px;
@@ -305,16 +320,26 @@
                     <li><a href="#awards"><i data-feather="award"></i> Reconocimiento</a></li>
                     <li><a href="#education"><i data-feather="book"></i> Educación</a></li>
                     <li><a href="#skills"><i data-feather="terminal"></i> Stack</a></li>
+                    <li><a href="#contact"><i data-feather="send"></i> Contacto</a></li>
                 </ul>
             </div>
+
 
             <div class="contact-box">
                 <div class="contact-row"><i data-feather="map-pin" width="18"></i> V Región, Chile</div>
                 <div class="contact-row"><i data-feather="smartphone" width="18"></i> <a href="tel:+56965798851">+56 9 6579 8851</a></div>
-                <div class="contact-row"><i data-feather="message-circle" width="18"></i> <a href="https://wa.me/56965798851" target="_blank" style="color:var(--neon-cyan); font-weight:bold;">WhatsApp Directo</a></div>
                 <div class="contact-row"><i data-feather="mail" width="18"></i> <a href="mailto:jferrandp@gmail.com">jferrandp@gmail.com</a></div>
-                <div class="contact-row"><i data-feather="linkedin" width="18"></i> <a href="https://www.linkedin.com/in/javierferrandp" target="_blank">LinkedIn</a></div>
-                <div class="contact-row"><i data-feather="globe" width="18"></i> <a href="https://www.luzkrudo.cl" target="_blank">Portafolio</a></div>
+                <div class="contact-buttons">
+                    <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp">
+                        <i data-feather="message-circle" width="16"></i> WhatsApp
+                    </a>
+                    <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin">
+                        <i data-feather="linkedin" width="16"></i> LinkedIn
+                    </a>
+                    <a href="https://www.luzkrudo.cl" target="_blank" class="contact-btn btn-web">
+                        <i data-feather="globe" width="16"></i> Portafolio
+                    </a>
+                </div>
             </div>
         </nav>
 
@@ -495,30 +520,19 @@
                             <span>Escuela Motivarte (Buenos Aires)</span>
                         </div>
 
-                        <!-- NABA Card con módulos -->
-                        <div class="edu-card-naba">
-                            <h3>Certificaciones Internacionales NABA</h3>
-                            <span class="naba-sub">Nuova Accademia di Belle Arti (Milán, Italia) · En convenio con AIEP / Universidad Andrés Bello</span>
-                            <div class="naba-modules">
-                                <span class="naba-module">Módulo G3</span>
-                                <span class="naba-module">Módulo G4</span>
-                                <span class="naba-module">Módulo G5</span>
-                                <span class="naba-module">Módulo G6</span>
-                                <span class="naba-module">Módulo G7</span>
-                                <span class="naba-module">Módulo G8</span>
-                            </div>
-                        </div>
                     </div>
 
                     <h3 class="edu-section-title">Certificaciones y Cursos</h3>
                     <div class="edu-grid-minor">
-                        <!-- Anthropic destacado -->
-                        <div class="edu-chip-anthropic">
-                            <i data-feather="zap"></i>
+                        <div class="edu-chip">
+                            <i data-feather="check-circle"></i>
                             <div>
-                                <span style="font-weight:600;">Claude Code in Action — Anthropic</span><br>
-                                <a href="https://verify.skilljar.com/c/ifoptaiv9kcp" target="_blank">Verificar credencial · ifoptaiv9kcp</a>
+                                <span style="font-weight:600; display:block;">Diseño Gráfico y Dirección de Arte — NABA Milano</span>
+                                <span style="color:#94a3b8; font-size:0.85rem;">Nuova Accademia di Belle Arti · AIEP / U. Andrés Bello · 2024–2025<br>Imagen Impresa · Imagen Digital · Diseño de la Comunicación · Space Design · Diseño de Empaque · Brand Design</span>
                             </div>
+                        </div>
+                        <div class="edu-chip">
+                            <i data-feather="check-circle"></i> <span>Claude Code in Action — Anthropic</span>
                         </div>
                         <div class="edu-chip">
                             <i data-feather="check-circle"></i> <span>Fundamentos IA Generativa (Microsoft & LinkedIn)</span>
@@ -560,6 +574,30 @@
                         <span class="skill-tag">[ Gestión Ágil ]</span>
                         <span class="skill-tag">[ Calidad NCh2728 ]</span>
                         <span class="skill-tag">[ Fondart ]</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <div class="section-content">
+                    <div class="section-header">
+                        <span class="section-number">07</span>
+                        <h2 class="shine-effect">Contacto</h2>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+                        <div style="color:#94a3b8; font-size:1rem; margin-right:10px;">
+                            <div style="margin-bottom:8px;"><strong>+56 9 6579 8851</strong></div>
+                            <div>jferrandp@gmail.com</div>
+                        </div>
+                        <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp" style="min-width:160px;">
+                            <i data-feather="message-circle" width="18"></i> WhatsApp
+                        </a>
+                        <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin" style="min-width:160px;">
+                            <i data-feather="linkedin" width="18"></i> LinkedIn
+                        </a>
+                        <a href="https://www.luzkrudo.cl" target="_blank" class="contact-btn btn-web" style="min-width:160px;">
+                            <i data-feather="globe" width="18"></i> Portafolio
+                        </a>
                     </div>
                 </div>
             </section>

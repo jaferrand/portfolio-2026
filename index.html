@@ -13,10 +13,9 @@
 
     <style>
         :root {
-            /* Paleta Cyberpunk Alto Contraste */
             --neon-cyan: #00f3ff;
             --neon-pink: #ff00ff;
-            --neon-gold: #ffd700;    /* Para destacar educación superior */
+            --neon-gold: #ffd700;
             --bg-dark: #02040a;       
             --bg-panel: #0d131f;      
             --text-main: #ffffff;     
@@ -26,7 +25,6 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         html { scroll-behavior: smooth; }
 
         body {
@@ -35,14 +33,12 @@
             color: var(--text-body);
             line-height: 1.7; 
             overflow-x: hidden;
-            /* Fondo Estático */
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
-        /* --- ANIMACIONES --- */
         @keyframes scanLight {
             0% { left: -100%; opacity: 0; }
             50% { opacity: 1; }
@@ -66,14 +62,12 @@
             transform: skewX(-25deg); pointer-events: none; z-index: 2;
         }
 
-        /* --- LAYOUT --- */
         .app-container {
             display: grid;
             grid-template-columns: 320px 1fr;
             min-height: 100vh;
         }
 
-        /* --- SIDEBAR --- */
         .sidebar {
             background: var(--bg-panel);
             border-right: 1px solid var(--border-color);
@@ -122,7 +116,6 @@
         .contact-row:hover { color: var(--neon-cyan); }
         .contact-row:hover a { color: var(--neon-cyan); }
 
-        /* --- MAIN CONTENT --- */
         .main-content { padding: 60px; }
         section { margin-bottom: 100px; }
         .section-content { padding: 20px; border-radius: 8px; transition: background 0.5s; border: 1px solid transparent; }
@@ -144,7 +137,6 @@
         p { margin-bottom: 15px; font-size: 1.05rem; color: var(--text-body); }
         strong { color: var(--neon-cyan); font-weight: 600; }
 
-        /* --- CARDS & GRIDS --- */
         .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
 
         .cyber-card {
@@ -177,7 +169,6 @@
         li { position: relative; padding-left: 20px; margin-bottom: 12px; color: var(--text-body); }
         li::before { content: '>'; position: absolute; left: 0; top: 5px; color: var(--neon-cyan); font-family: monospace; font-weight: bold; }
 
-        /* --- EXPERIENCE --- */
         .exp-grid { display: grid; gap: 30px; }
         .exp-item {
             border-left: 2px solid var(--border-color); padding-left: 30px; position: relative;
@@ -193,14 +184,12 @@
         .exp-company { font-family: 'Rajdhani', sans-serif; color: var(--neon-cyan); font-size: 1.1rem; text-transform: uppercase; }
         .exp-date { font-family: 'Roboto Mono', monospace; font-size: 0.85rem; color: #94a3b8; margin-left: 10px; }
 
-        /* --- AWARDS --- */
         .award-box {
             display: flex; align-items: center; gap: 20px;
             background: linear-gradient(90deg, rgba(188, 19, 254, 0.1), transparent);
             border-left: 4px solid var(--neon-pink); padding: 25px;
         }
 
-        /* --- SKILLS --- */
         .skills-container {
             display: flex; flex-wrap: wrap; gap: 15px;
             background: #0f1623; padding: 25px; border: 1px solid var(--border-color);
@@ -216,7 +205,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- EDUCACIÓN JERARQUÍA --- */
         .edu-section-title {
             font-family: 'Rajdhani', sans-serif; color: var(--text-main); font-size: 1.3rem;
             margin: 40px 0 20px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;
@@ -229,12 +217,30 @@
         
         .edu-card-major {
             background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
-            border-top: 3px solid var(--neon-gold); /* Borde Dorado */
+            border-top: 3px solid var(--neon-gold);
             transition: transform 0.2s; position: relative;
         }
         .edu-card-major:hover { transform: translateY(-5px); border-color: var(--neon-gold); }
         .edu-card-major h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 5px; text-transform: uppercase; }
         .edu-card-major span { color: #94a3b8; font-size: 0.95rem; display: block; }
+
+        /* Card NABA especial */
+        .edu-card-naba {
+            background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
+            border-top: 3px solid var(--neon-gold);
+            transition: transform 0.2s; grid-column: 1 / -1;
+        }
+        .edu-card-naba:hover { transform: translateY(-3px); border-color: var(--neon-gold); }
+        .edu-card-naba h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 4px; text-transform: uppercase; }
+        .edu-card-naba .naba-sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; display: block; }
+        .naba-modules {
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
+        }
+        .naba-module {
+            font-family: 'Roboto Mono', monospace; background: rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.25); color: var(--neon-gold);
+            padding: 5px 14px; font-size: 0.8rem; border-radius: 3px;
+        }
 
         .edu-grid-minor {
             display: flex; flex-wrap: wrap; gap: 15px;
@@ -246,7 +252,19 @@
         }
         .edu-chip i { color: var(--neon-cyan); width: 16px; height: 16px; }
 
-        /* --- BOTÓN VOLVER ARRIBA (SOLO MÓVIL) --- */
+        /* Chip Anthropic destacado */
+        .edu-chip-anthropic {
+            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.35);
+            padding: 10px 20px; border-radius: 4px; display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; color: var(--neon-cyan);
+        }
+        .edu-chip-anthropic a {
+            color: var(--neon-cyan); text-decoration: none; font-family: 'Roboto Mono', monospace;
+            font-size: 0.78rem; opacity: 0.7;
+        }
+        .edu-chip-anthropic a:hover { opacity: 1; text-decoration: underline; }
+        .edu-chip-anthropic i { color: var(--neon-cyan); width: 16px; height: 16px; }
+
         .scroll-top-btn {
             position: fixed; bottom: 30px; right: 20px; width: 50px; height: 50px;
             background: rgba(2, 4, 10, 0.95); border: 2px solid var(--neon-cyan); color: var(--neon-cyan);
@@ -257,7 +275,6 @@
         .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .scroll-top-btn:active { background: var(--neon-cyan); color: #000; transform: scale(0.9); }
 
-        /* REGLA DE ORO: OCULTAR EN PANTALLAS GRANDES */
         @media (min-width: 900px) {
             .app-container { grid-template-columns: 320px 1fr; }
             .scroll-top-btn { display: none !important; }
@@ -419,7 +436,7 @@
                         <div class="exp-item">
                             <div class="exp-title">Realizador Audiovisual y Director de Fotografía <span class="exp-company">// Independiente</span></div>
                             <ul>
-                                <li><strong>Web Serie "Encubierto" (2020):</strong> Responsable de la dirección visual, diseño de iluminación y grabación técnica de la serie.</li>
+                                <li><strong>Web Serie "Encubierto" (2020):</strong> <strong>Director de Fotografía</strong> — responsable de la dirección visual, concepto de iluminación y dirección técnica de cámara de la serie.</li>
                                 <li><strong>Festival Internacional de Cine de Puerto Montt:</strong> Dirección y realización del spot oficial del primer certamen.</li>
                                 <li><strong>Temporales Internacionales de Teatro de Puerto Montt:</strong> Realización del spot oficial para el evento cultural.</li>
                             </ul>
@@ -477,10 +494,32 @@
                             <h3>Fotografía Profesional</h3>
                             <span>Escuela Motivarte (Buenos Aires)</span>
                         </div>
+
+                        <!-- NABA Card con módulos -->
+                        <div class="edu-card-naba">
+                            <h3>Certificaciones Internacionales NABA</h3>
+                            <span class="naba-sub">Nuova Accademia di Belle Arti (Milán, Italia) · En convenio con AIEP / Universidad Andrés Bello</span>
+                            <div class="naba-modules">
+                                <span class="naba-module">Módulo G3</span>
+                                <span class="naba-module">Módulo G4</span>
+                                <span class="naba-module">Módulo G5</span>
+                                <span class="naba-module">Módulo G6</span>
+                                <span class="naba-module">Módulo G7</span>
+                                <span class="naba-module">Módulo G8</span>
+                            </div>
+                        </div>
                     </div>
 
                     <h3 class="edu-section-title">Certificaciones y Cursos</h3>
                     <div class="edu-grid-minor">
+                        <!-- Anthropic destacado -->
+                        <div class="edu-chip-anthropic">
+                            <i data-feather="zap"></i>
+                            <div>
+                                <span style="font-weight:600;">Claude Code in Action — Anthropic</span><br>
+                                <a href="https://verify.skilljar.com/c/ifoptaiv9kcp" target="_blank">Verificar credencial · ifoptaiv9kcp</a>
+                            </div>
+                        </div>
                         <div class="edu-chip">
                             <i data-feather="check-circle"></i> <span>Fundamentos IA Generativa (Microsoft & LinkedIn)</span>
                         </div>
@@ -504,18 +543,23 @@
                         <h2 class="shine-effect">Habilidades y Herramientas</h2>
                     </div>
                     <div class="skills-container">
-                        <span class="skill-tag">[ Gestión Ágil ]</span>
-                        <span class="skill-tag">[ Calidad NCh2728 ]</span>
-                        <span class="skill-tag">[ Fondart ]</span>
+                        <span class="skill-tag">[ React ]</span>
+                        <span class="skill-tag">[ Vite ]</span>
+                        <span class="skill-tag">[ Node.js ]</span>
+                        <span class="skill-tag">[ WordPress ]</span>
                         <span class="skill-tag">[ FlutterFlow ]</span>
                         <span class="skill-tag">[ Firebase ]</span>
                         <span class="skill-tag">[ Google Cloud ]</span>
                         <span class="skill-tag">[ Google Maps API ]</span>
-                        <span class="skill-tag">[ WordPress ]</span>
                         <span class="skill-tag">[ Git/GitHub ]</span>
+                        <span class="skill-tag">[ Claude AI ]</span>
+                        <span class="skill-tag">[ IA Generativa ]</span>
                         <span class="skill-tag">[ Blender 3D ]</span>
                         <span class="skill-tag">[ Adobe CC ]</span>
                         <span class="skill-tag">[ Figma ]</span>
+                        <span class="skill-tag">[ Gestión Ágil ]</span>
+                        <span class="skill-tag">[ Calidad NCh2728 ]</span>
+                        <span class="skill-tag">[ Fondart ]</span>
                     </div>
                 </div>
             </section>
@@ -528,10 +572,7 @@
     </a>
 
     <script>
-        // Inicializar Iconos
         feather.replace();
-
-        // Lógica para botón Volver Arriba (Solo Móvil)
         const scrollBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {

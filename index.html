@@ -1,624 +1,709 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYSTEM.DASHBOARD // JAVIER FERRAND</title>
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/feather-icons"></script>
+
+<style>
+    :root {
+        --neon-cyan: #00f3ff;
+        --neon-pink: #ff00ff;
+        --neon-gold: #ffd700;
+        --bg-dark: #02040a;       
+        --bg-panel: #0d131f;      
+        --text-main: #ffffff;     
+        --text-body: #e2e8f0;     
+        --border-color: #1e293b;
+        --grid-line: rgba(0, 243, 255, 0.07);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: 'Inter', sans-serif; 
+        background-color: var(--bg-dark);
+        color: var(--text-body);
+        line-height: 1.7; 
+        overflow-x: hidden;
+        background-image: 
+            linear-gradient(var(--grid-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    @keyframes scanLight {
+        0% { left: -100%; opacity: 0; }
+        50% { opacity: 1; }
+        100% { left: 200%; opacity: 0; }
+    }
+
+    @keyframes targetFlash {
+        0% { background-color: rgba(0, 243, 255, 0.2); border-color: var(--neon-cyan); }
+        100% { background-color: transparent; border-color: var(--border-color); }
+    }
+
+    section:target .section-content {
+        animation: targetFlash 1s ease-out;
+        border: 1px solid var(--neon-cyan);
+    }
+
+    .shine-effect { position: relative; overflow: hidden; }
+    .shine-effect::after {
+        content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transform: skewX(-25deg); pointer-events: none; z-index: 2;
+    }
+
+    .app-container {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        background: var(--bg-panel);
+        border-right: 1px solid var(--border-color);
+        padding: 30px;
+        position: sticky; top: 0; height: 100vh;
+        display: flex; flex-direction: column; justify-content: space-between;
+        z-index: 100; box-shadow: 5px 0 30px rgba(0,0,0,0.6);
+        overflow-y: auto;
+    }
+
+    .brand-area { margin-bottom: 20px; }
+    .brand-area h1 {
+        font-family: 'Rajdhani', sans-serif; font-size: 3rem; line-height: 0.9;
+        text-transform: uppercase; margin-bottom: 15px; color: var(--neon-cyan);
+    }
+    .brand-area h1.shine-effect::after {
+        animation: scanLight 4s ease-in-out infinite;
+        background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.6), transparent);
+    }
+
+    .role-badge {
+        display: inline-block; background: rgba(0, 243, 255, 0.05); color: var(--neon-cyan);
+        padding: 6px 12px; font-family: 'Roboto Mono', monospace; font-size: 0.75rem;
+        border: 1px solid rgba(0, 243, 255, 0.3); letter-spacing: 1px; border-radius: 4px;
+    }
+
+    .nav-menu { list-style: none; }
+    .nav-menu li { margin-bottom: 8px; }
+    .nav-menu a {
+        text-decoration: none; color: #94a3b8; font-family: 'Rajdhani', sans-serif;
+        font-weight: 600; font-size: 1.15rem; text-transform: uppercase;
+        display: flex; align-items: center; gap: 12px; padding: 12px;
+        border-radius: 4px; transition: all 0.2s; border-left: 3px solid transparent;
+    }
+    .nav-menu a:hover {
+        color: var(--text-main); background: rgba(255, 255, 255, 0.05);
+        border-left-color: var(--neon-pink); transform: translateX(5px);
+        text-shadow: 0 0 8px var(--neon-pink);
+    }
+
+    .contact-box { border-top: 1px solid var(--border-color); padding-top: 25px; font-size: 0.9rem; }
+    .contact-row {
+        display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+        color: #cbd5e1; transition: color 0.3s;
+    }
+    .contact-row a { color: inherit; text-decoration: none; }
+    .contact-row:hover { color: var(--neon-cyan); }
+    .contact-row:hover a { color: var(--neon-cyan); }
+
+    .main-content { padding: 60px; }
+    section { margin-bottom: 100px; }
+    .section-content { padding: 20px; border-radius: 8px; transition: background 0.5s; border: 1px solid transparent; }
+
+    .section-header {
+        display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
+        border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
+    }
+    .section-header h2 {
+        font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; text-transform: uppercase;
+        color: var(--text-main); padding-right: 20px; border-radius: 4px;
+    }
+    .section-header:hover h2.shine-effect::after { animation: scanLight 1s ease-in-out forwards; }
+    .section-number {
+        font-family: 'Roboto Mono', monospace; color: var(--neon-cyan);
+        font-size: 1.5rem; font-weight: bold; opacity: 0.7;
+    }
+
+    p { margin-bottom: 15px; font-size: 1.05rem; color: var(--text-body); }
+    strong { color: var(--neon-cyan); font-weight: 600; }
+
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
+
+    .cyber-card {
+        background: #0f1623; border: 1px solid var(--border-color); padding: 30px;
+        position: relative; transition: transform 0.3s, border-color 0.3s; overflow: hidden;
+    }
+    .cyber-card:hover {
+        transform: translateY(-5px); border-color: var(--neon-cyan);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .cyber-card:hover.shine-effect::after {
+        animation: scanLight 1.5s ease-in-out;
+        background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+    }
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    .card-header {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
+    }
+    .project-title { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; color: var(--text-main); font-weight: 700; }
+    .role-tag { font-family: 'Roboto Mono', monospace; color: var(--neon-pink); font-size: 0.85rem; display: block; margin-top: 5px; }
+    .status-badge {
+        background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
+        color: #94a3b8; padding: 4px 10px; font-size: 0.75rem;
+        text-transform: uppercase; font-weight: bold; letter-spacing: 1px; border-radius: 4px;
+    }
+    .job-meta { color: #94a3b8; font-style: italic; margin-bottom: 15px; display: block; }
     
-    <script src="https://unpkg.com/feather-icons"></script>
+    ul { list-style: none; }
+    li { position: relative; padding-left: 20px; margin-bottom: 12px; color: var(--text-body); }
+    li::before { content: '>'; position: absolute; left: 0; top: 5px; color: var(--neon-cyan); font-family: monospace; font-weight: bold; }
 
-    <style>
-        :root {
-            --neon-cyan: #00f3ff;
-            --neon-pink: #ff00ff;
-            --neon-gold: #ffd700;
-            --bg-dark: #02040a;       
-            --bg-panel: #0d131f;      
-            --text-main: #ffffff;     
-            --text-body: #e2e8f0;     
-            --border-color: #1e293b;
-            --grid-line: rgba(0, 243, 255, 0.07);
-        }
+    .exp-grid { display: grid; gap: 30px; }
+    .exp-item {
+        border-left: 2px solid var(--border-color); padding-left: 30px; position: relative;
+        transition: border-color 0.3s;
+    }
+    .exp-item:hover { border-left-color: var(--neon-pink); }
+    .exp-item::after {
+        content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px;
+        background: var(--bg-dark); border: 2px solid var(--border-color); transition: 0.3s;
+    }
+    .exp-item:hover::after { border-color: var(--neon-pink); background: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
+    .exp-title { font-size: 1.2rem; color: var(--text-main); font-weight: 700; margin-bottom: 5px; }
+    .exp-company { font-family: 'Rajdhani', sans-serif; color: var(--neon-cyan); font-size: 1.1rem; text-transform: uppercase; }
+    .exp-date { font-family: 'Roboto Mono', monospace; font-size: 0.85rem; color: #94a3b8; margin-left: 10px; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+    .award-box {
+        display: flex; align-items: center; gap: 20px;
+        background: linear-gradient(90deg, rgba(188, 19, 254, 0.1), transparent);
+        border-left: 4px solid var(--neon-pink); padding: 25px;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-dark);
-            color: var(--text-body);
-            line-height: 1.7; 
-            overflow-x: hidden;
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
+    .skills-container {
+        display: flex; flex-wrap: wrap; gap: 15px;
+        background: #0f1623; padding: 25px; border: 1px solid var(--border-color);
+    }
+    .skill-tag {
+        font-family: 'Roboto Mono', monospace; background: rgba(0, 243, 255, 0.05);
+        border: 1px solid var(--border-color); color: var(--neon-cyan);
+        padding: 8px 16px; font-size: 0.9rem; transition: all 0.2s; cursor: default;
+    }
+    .skill-tag:hover {
+        background: var(--neon-cyan); color: #000;
+        border-color: var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan);
+        transform: translateY(-2px);
+    }
 
-        @keyframes scanLight {
-            0% { left: -100%; opacity: 0; }
-            50% { opacity: 1; }
-            100% { left: 200%; opacity: 0; }
-        }
+    .edu-section-title {
+        font-family: 'Rajdhani', sans-serif; color: var(--text-main); font-size: 1.3rem;
+        margin: 40px 0 20px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;
+        text-transform: uppercase; letter-spacing: 1px;
+    }
 
-        @keyframes targetFlash {
-            0% { background-color: rgba(0, 243, 255, 0.2); border-color: var(--neon-cyan); }
-            100% { background-color: transparent; border-color: var(--border-color); }
-        }
+    .edu-grid-major {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;
+    }
+    
+    .edu-card-major {
+        background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
+        border-top: 3px solid var(--neon-gold);
+        transition: transform 0.2s; position: relative;
+    }
+    .edu-card-major:hover { transform: translateY(-5px); border-color: var(--neon-gold); }
+    .edu-card-major h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 5px; text-transform: uppercase; }
+    .edu-card-major span { color: #94a3b8; font-size: 0.95rem; display: block; }
 
-        section:target .section-content {
-            animation: targetFlash 1s ease-out;
-            border: 1px solid var(--neon-cyan);
-        }
+    .edu-card-naba {
+        background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
+        border-top: 3px solid var(--neon-gold);
+        transition: transform 0.2s; grid-column: 1 / -1;
+    }
+    .edu-card-naba:hover { transform: translateY(-3px); border-color: var(--neon-gold); }
+    .edu-card-naba h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 4px; text-transform: uppercase; }
+    .edu-card-naba .naba-sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; display: block; }
+    .naba-modules {
+        display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
+    }
+    .naba-module {
+        font-family: 'Roboto Mono', monospace; background: rgba(255, 215, 0, 0.06);
+        border: 1px solid rgba(255, 215, 0, 0.25); color: var(--neon-gold);
+        padding: 5px 14px; font-size: 0.8rem; border-radius: 3px;
+    }
 
-        .shine-effect { position: relative; overflow: hidden; }
-        .shine-effect::after {
-            content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transform: skewX(-25deg); pointer-events: none; z-index: 2;
-        }
+    .edu-grid-minor {
+        display: flex; flex-wrap: wrap; gap: 15px;
+    }
+    .edu-chip {
+        background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
+        padding: 20px 28px; border-radius: 4px; display: flex; align-items: flex-start; gap: 16px;
+        font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;
+    }
+    .edu-chip i { color: var(--neon-cyan); width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; }
 
-        .app-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            min-height: 100vh;
-        }
+    .edu-chip-anthropic {
+        background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.35);
+        padding: 10px 20px; border-radius: 4px; display: flex; align-items: center; gap: 10px;
+        font-size: 0.9rem; color: var(--neon-cyan);
+    }
+    .edu-chip-anthropic a {
+        color: var(--neon-cyan); text-decoration: none; font-family: 'Roboto Mono', monospace;
+        font-size: 0.78rem; opacity: 0.7;
+    }
+    .edu-chip-anthropic a:hover { opacity: 1; text-decoration: underline; }
+    .edu-chip-anthropic i { color: var(--neon-cyan); width: 16px; height: 16px; }
 
-        .sidebar {
-            background: var(--bg-panel);
-            border-right: 1px solid var(--border-color);
-            padding: 30px;
-            position: sticky; top: 0; height: 100vh;
-            display: flex; flex-direction: column; justify-content: space-between;
-            z-index: 100; box-shadow: 5px 0 30px rgba(0,0,0,0.6);
-            overflow-y: auto;
-        }
+    .contact-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+    .contact-btn {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 11px 16px; border-radius: 4px; text-decoration: none;
+        font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem;
+        letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s;
+    }
+    .btn-wsp { background: rgba(37, 211, 102, 0.12); border: 1px solid #25d366; color: #25d366; }
+    .btn-wsp:hover { background: #25d366; color: #000; box-shadow: 0 0 15px #25d366; }
+    .btn-email { background: rgba(0, 243, 255, 0.06); border: 1px solid rgba(0, 243, 255, 0.35); color: #94a3b8; }
+    .btn-email:hover { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.25); }
+    .btn-linkedin { background: rgba(10, 102, 194, 0.12); border: 1px solid #0a66c2; color: #5aa9e6; }
+    .btn-linkedin:hover { background: #0a66c2; color: #fff; box-shadow: 0 0 15px #0a66c2; }
+    .btn-web { background: rgba(0, 243, 255, 0.06); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
+    .btn-web:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
 
-        .brand-area { margin-bottom: 20px; }
-        .brand-area h1 {
-            font-family: 'Rajdhani', sans-serif; font-size: 3rem; line-height: 0.9;
-            text-transform: uppercase; margin-bottom: 15px; color: var(--neon-cyan);
-        }
-        .brand-area h1.shine-effect::after {
-            animation: scanLight 4s ease-in-out infinite;
-            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.6), transparent);
-        }
+    .scroll-top-btn {
+        position: fixed; bottom: 30px; right: 20px; width: 50px; height: 50px;
+        background: rgba(2, 4, 10, 0.95); border: 2px solid var(--neon-cyan); color: var(--neon-cyan);
+        border-radius: 50%; display: flex; justify-content: center; align-items: center;
+        z-index: 9999; cursor: pointer; opacity: 0; visibility: hidden;
+        transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); text-decoration: none;
+    }
+    .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+    .scroll-top-btn:active { background: var(--neon-cyan); color: #000; transform: scale(0.9); }
 
-        .role-badge {
-            display: inline-block; background: rgba(0, 243, 255, 0.05); color: var(--neon-cyan);
-            padding: 6px 12px; font-family: 'Roboto Mono', monospace; font-size: 0.75rem;
-            border: 1px solid rgba(0, 243, 255, 0.3); letter-spacing: 1px; border-radius: 4px;
-        }
+    @media (min-width: 900px) {
+        .app-container { grid-template-columns: 320px 1fr; }
+        .scroll-top-btn { display: none !important; }
+    }
+    @media (max-width: 900px) {
+        .app-container { grid-template-columns: 1fr; }
+        .sidebar { height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border-color); }
+        .main-content { padding: 30px 20px; }
+        .project-grid { grid-template-columns: 1fr; }
+    }
+</style>
+```
 
-        .nav-menu { list-style: none; }
-        .nav-menu li { margin-bottom: 8px; }
-        .nav-menu a {
-            text-decoration: none; color: #94a3b8; font-family: 'Rajdhani', sans-serif;
-            font-weight: 600; font-size: 1.15rem; text-transform: uppercase;
-            display: flex; align-items: center; gap: 12px; padding: 12px;
-            border-radius: 4px; transition: all 0.2s; border-left: 3px solid transparent;
-        }
-        .nav-menu a:hover {
-            color: var(--text-main); background: rgba(255, 255, 255, 0.05);
-            border-left-color: var(--neon-pink); transform: translateX(5px);
-            text-shadow: 0 0 8px var(--neon-pink);
-        }
-
-        .contact-box { border-top: 1px solid var(--border-color); padding-top: 25px; font-size: 0.9rem; }
-        .contact-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
-            color: #cbd5e1; transition: color 0.3s;
-        }
-        .contact-row a { color: inherit; text-decoration: none; }
-        .contact-row:hover { color: var(--neon-cyan); }
-        .contact-row:hover a { color: var(--neon-cyan); }
-
-        .main-content { padding: 60px; }
-        section { margin-bottom: 100px; }
-        .section-content { padding: 20px; border-radius: 8px; transition: background 0.5s; border: 1px solid transparent; }
-
-        .section-header {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
-            border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
-        }
-        .section-header h2 {
-            font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; text-transform: uppercase;
-            color: var(--text-main); padding-right: 20px; border-radius: 4px;
-        }
-        .section-header:hover h2.shine-effect::after { animation: scanLight 1s ease-in-out forwards; }
-        .section-number {
-            font-family: 'Roboto Mono', monospace; color: var(--neon-cyan);
-            font-size: 1.5rem; font-weight: bold; opacity: 0.7;
-        }
-
-        p { margin-bottom: 15px; font-size: 1.05rem; color: var(--text-body); }
-        strong { color: var(--neon-cyan); font-weight: 600; }
-
-        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
-
-        .cyber-card {
-            background: #0f1623; border: 1px solid var(--border-color); padding: 30px;
-            position: relative; transition: transform 0.3s, border-color 0.3s; overflow: hidden;
-        }
-        .cyber-card:hover {
-            transform: translateY(-5px); border-color: var(--neon-cyan);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .cyber-card:hover.shine-effect::after {
-            animation: scanLight 1.5s ease-in-out;
-            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
-        }
-        
-        .card-header {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;
-        }
-        .project-title { font-family: 'Rajdhani', sans-serif; font-size: 1.6rem; color: var(--text-main); font-weight: 700; }
-        .role-tag { font-family: 'Roboto Mono', monospace; color: var(--neon-pink); font-size: 0.85rem; display: block; margin-top: 5px; }
-        .status-badge {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color);
-            color: #94a3b8; padding: 4px 10px; font-size: 0.75rem;
-            text-transform: uppercase; font-weight: bold; letter-spacing: 1px; border-radius: 4px;
-        }
-        .job-meta { color: #94a3b8; font-style: italic; margin-bottom: 15px; display: block; }
-        
-        ul { list-style: none; }
-        li { position: relative; padding-left: 20px; margin-bottom: 12px; color: var(--text-body); }
-        li::before { content: '>'; position: absolute; left: 0; top: 5px; color: var(--neon-cyan); font-family: monospace; font-weight: bold; }
-
-        .exp-grid { display: grid; gap: 30px; }
-        .exp-item {
-            border-left: 2px solid var(--border-color); padding-left: 30px; position: relative;
-            transition: border-color 0.3s;
-        }
-        .exp-item:hover { border-left-color: var(--neon-pink); }
-        .exp-item::after {
-            content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px;
-            background: var(--bg-dark); border: 2px solid var(--border-color); transition: 0.3s;
-        }
-        .exp-item:hover::after { border-color: var(--neon-pink); background: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
-        .exp-title { font-size: 1.2rem; color: var(--text-main); font-weight: 700; margin-bottom: 5px; }
-        .exp-company { font-family: 'Rajdhani', sans-serif; color: var(--neon-cyan); font-size: 1.1rem; text-transform: uppercase; }
-        .exp-date { font-family: 'Roboto Mono', monospace; font-size: 0.85rem; color: #94a3b8; margin-left: 10px; }
-
-        .award-box {
-            display: flex; align-items: center; gap: 20px;
-            background: linear-gradient(90deg, rgba(188, 19, 254, 0.1), transparent);
-            border-left: 4px solid var(--neon-pink); padding: 25px;
-        }
-
-        .skills-container {
-            display: flex; flex-wrap: wrap; gap: 15px;
-            background: #0f1623; padding: 25px; border: 1px solid var(--border-color);
-        }
-        .skill-tag {
-            font-family: 'Roboto Mono', monospace; background: rgba(0, 243, 255, 0.05);
-            border: 1px solid var(--border-color); color: var(--neon-cyan);
-            padding: 8px 16px; font-size: 0.9rem; transition: all 0.2s; cursor: default;
-        }
-        .skill-tag:hover {
-            background: var(--neon-cyan); color: #000;
-            border-color: var(--neon-cyan); box-shadow: 0 0 20px var(--neon-cyan);
-            transform: translateY(-2px);
-        }
-
-        .edu-section-title {
-            font-family: 'Rajdhani', sans-serif; color: var(--text-main); font-size: 1.3rem;
-            margin: 40px 0 20px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .edu-grid-major {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;
-        }
-        
-        .edu-card-major {
-            background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
-            border-top: 3px solid var(--neon-gold);
-            transition: transform 0.2s; position: relative;
-        }
-        .edu-card-major:hover { transform: translateY(-5px); border-color: var(--neon-gold); }
-        .edu-card-major h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 5px; text-transform: uppercase; }
-        .edu-card-major span { color: #94a3b8; font-size: 0.95rem; display: block; }
-
-        /* Card NABA especial */
-        .edu-card-naba {
-            background: #0f1623; border: 1px solid var(--border-color); padding: 25px;
-            border-top: 3px solid var(--neon-gold);
-            transition: transform 0.2s; grid-column: 1 / -1;
-        }
-        .edu-card-naba:hover { transform: translateY(-3px); border-color: var(--neon-gold); }
-        .edu-card-naba h3 { color: var(--neon-gold); font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; margin-bottom: 4px; text-transform: uppercase; }
-        .edu-card-naba .naba-sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; display: block; }
-        .naba-modules {
-            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;
-        }
-        .naba-module {
-            font-family: 'Roboto Mono', monospace; background: rgba(255, 215, 0, 0.06);
-            border: 1px solid rgba(255, 215, 0, 0.25); color: var(--neon-gold);
-            padding: 5px 14px; font-size: 0.8rem; border-radius: 3px;
-        }
-
-        .edu-grid-minor {
-            display: flex; flex-wrap: wrap; gap: 15px;
-        }
-        .edu-chip {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color);
-            padding: 20px 28px; border-radius: 4px; display: flex; align-items: flex-start; gap: 16px;
-            font-size: 1.1rem; color: #cbd5e1; line-height: 1.6;
-        }
-        .edu-chip i { color: var(--neon-cyan); width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; }
-
-        /* Chip Anthropic destacado */
-        .edu-chip-anthropic {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.35);
-            padding: 10px 20px; border-radius: 4px; display: flex; align-items: center; gap: 10px;
-            font-size: 0.9rem; color: var(--neon-cyan);
-        }
-        .edu-chip-anthropic a {
-            color: var(--neon-cyan); text-decoration: none; font-family: 'Roboto Mono', monospace;
-            font-size: 0.78rem; opacity: 0.7;
-        }
-        .edu-chip-anthropic a:hover { opacity: 1; text-decoration: underline; }
-        .edu-chip-anthropic i { color: var(--neon-cyan); width: 16px; height: 16px; }
-
-        .contact-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
-        .contact-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 11px 16px; border-radius: 4px; text-decoration: none;
-            font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem;
-            letter-spacing: 1px; text-transform: uppercase; transition: all 0.2s;
-        }
-        .btn-wsp { background: rgba(37, 211, 102, 0.12); border: 1px solid #25d366; color: #25d366; }
-        .btn-wsp:hover { background: #25d366; color: #000; box-shadow: 0 0 15px #25d366; }
-        .btn-linkedin { background: rgba(10, 102, 194, 0.12); border: 1px solid #0a66c2; color: #5aa9e6; }
-        .btn-linkedin:hover { background: #0a66c2; color: #fff; box-shadow: 0 0 15px #0a66c2; }
-        .btn-web { background: rgba(0, 243, 255, 0.06); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); }
-        .btn-web:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
-
-        .scroll-top-btn {
-            position: fixed; bottom: 30px; right: 20px; width: 50px; height: 50px;
-            background: rgba(2, 4, 10, 0.95); border: 2px solid var(--neon-cyan); color: var(--neon-cyan);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            z-index: 9999; cursor: pointer; opacity: 0; visibility: hidden;
-            transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); text-decoration: none;
-        }
-        .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .scroll-top-btn:active { background: var(--neon-cyan); color: #000; transform: scale(0.9); }
-
-        @media (min-width: 900px) {
-            .app-container { grid-template-columns: 320px 1fr; }
-            .scroll-top-btn { display: none !important; }
-        }
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; }
-            .sidebar { height: auto; position: relative; border-right: none; border-bottom: 1px solid var(--border-color); }
-            .main-content { padding: 30px 20px; }
-            .project-grid { grid-template-columns: 1fr; }
-        }
-    </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <nav class="sidebar">
-            <div>
-                <div class="brand-area">
-                    <h1 class="shine-effect">JAVIER<br>FERRAND</h1>
-                    <div class="role-badge">Gestor de Soluciones Digitales</div>
-                </div>
-
-                <ul class="nav-menu">
-                    <li><a href="#profile"><i data-feather="user"></i> Perfil</a></li>
-                    <li><a href="#projects"><i data-feather="cpu"></i> Proyectos</a></li>
-                    <li><a href="#experience"><i data-feather="briefcase"></i> Experiencia</a></li>
-                    <li><a href="#awards"><i data-feather="award"></i> Reconocimiento</a></li>
-                    <li><a href="#education"><i data-feather="book"></i> Educación</a></li>
-                    <li><a href="#skills"><i data-feather="terminal"></i> Stack</a></li>
-                    <li><a href="#contact"><i data-feather="send"></i> Contacto</a></li>
-                </ul>
+```
+<div class="app-container">
+    
+    <nav class="sidebar">
+        <div>
+            <div class="brand-area">
+                <h1 class="shine-effect">JAVIER<br>FERRAND</h1>
+                <div class="role-badge">Gestor de Soluciones Digitales</div>
             </div>
 
+            <ul class="nav-menu">
+                <li><a href="#profile"><i data-feather="user"></i> Perfil</a></li>
+                <li><a href="#projects"><i data-feather="cpu"></i> Proyectos</a></li>
+                <li><a href="#experience"><i data-feather="briefcase"></i> Experiencia</a></li>
+                <li><a href="#awards"><i data-feather="award"></i> Reconocimiento</a></li>
+                <li><a href="#education"><i data-feather="book"></i> Educación</a></li>
+                <li><a href="#skills"><i data-feather="terminal"></i> Stack</a></li>
+                <li><a href="#contact"><i data-feather="send"></i> Contacto</a></li>
+            </ul>
+        </div>
 
-            <div class="contact-box">
-                <div class="contact-row"><i data-feather="map-pin" width="18"></i> V Región, Chile</div>
-                <div class="contact-row"><i data-feather="smartphone" width="18"></i> <a href="tel:+56965798851">+56 9 6579 8851</a></div>
-                <div class="contact-row"><i data-feather="mail" width="18"></i> <a href="mailto:jferrandp@gmail.com">jferrandp@gmail.com</a></div>
-                <div class="contact-buttons">
-                    <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp">
-                        <i data-feather="message-circle" width="16"></i> WhatsApp
-                    </a>
-                    <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin">
-                        <i data-feather="linkedin" width="16"></i> LinkedIn
-                    </a>
-                    <a href="https://www.luzkrudo.cl" target="_blank" class="contact-btn btn-web">
-                        <i data-feather="globe" width="16"></i> Portafolio
-                    </a>
+        <div class="contact-box">
+            <div class="contact-row"><i data-feather="map-pin" width="18"></i> V Región, Chile</div>
+            <div class="contact-row"><i data-feather="smartphone" width="18"></i> <a href="tel:+56965798851">+56 9 6579 8851</a></div>
+            <div class="contact-buttons">
+                <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp">
+                    <i data-feather="message-circle" width="16"></i> WhatsApp
+                </a>
+                <a href="mailto:jferrandp@gmail.com" class="contact-btn btn-email">
+                    <i data-feather="mail" width="16"></i> Correo
+                </a>
+                <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin">
+                    <i data-feather="linkedin" width="16"></i> LinkedIn
+                </a>
+                <a href="https://luzkrudo.cl/portafolio-2/" target="_blank" class="contact-btn btn-web">
+                    <i data-feather="globe" width="16"></i> Portafolio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+
+        <section id="profile">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">01</span>
+                    <h2 class="shine-effect">Perfil Profesional</h2>
+                </div>
+                <div style="background: var(--bg-panel); padding: 30px; border-left: 4px solid var(--neon-cyan);">
+                    <p style="margin:0;">
+                        Profesional con más de 16 años de trayectoria integrando tecnología, gestión cultural y docencia. Poseo un perfil híbrido que combina la dirección de proyectos digitales con habilidades técnicas en desarrollo web y diseño de experiencia (UX). Cuento con experiencia comprobable liderando el ciclo completo de Productos Mínimos Viables (MVP) y gestionando proyectos con financiamiento público y privado. Busco aportar mi capacidad de ejecución y visión integral en equipos que desarrollen soluciones tecnológicas innovadoras.
+                    </p>
                 </div>
             </div>
-        </nav>
+        </section>
 
-        <main class="main-content">
-
-            <section id="profile">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">01</span>
-                        <h2 class="shine-effect">Perfil Profesional</h2>
-                    </div>
-                    <div style="background: var(--bg-panel); padding: 30px; border-left: 4px solid var(--neon-cyan);">
-                        <p style="margin:0;">
-                            Profesional con más de 16 años de trayectoria integrando tecnología, gestión cultural y docencia. Poseo un perfil híbrido que combina la dirección de proyectos digitales con habilidades técnicas en desarrollo web y diseño de experiencia (UX). Cuento con experiencia comprobable liderando el ciclo completo de Productos Mínimos Viables (MVP) y gestionando proyectos con financiamiento público y privado. Busco aportar mi capacidad de ejecución y visión integral en equipos que desarrollen soluciones tecnológicas innovadoras.
-                        </p>
-                    </div>
+        <section id="projects">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">02</span>
+                    <h2 class="shine-effect">Proyectos Destacados (Portafolio Técnico)</h2>
                 </div>
-            </section>
-
-            <section id="projects">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">02</span>
-                        <h2 class="shine-effect">Proyectos Destacados (Portafolio Técnico)</h2>
-                    </div>
-                    
-                    <div class="project-grid">
-                        <article class="cyber-card shine-effect">
-                            <div class="card-header">
-                                <div>
-                                    <div class="project-title">Museo Urbano Mayaca (MUM)</div>
-                                    <span class="role-tag">Líder Técnico y Creativo</span>
-                                </div>
-                                <span class="status-badge">MVP Offline</span>
-                            </div>
-                            <span class="job-meta">Desarrollo de ecosistema digital y MVP por encargo institucional de AIEP y la I. Municipalidad de Quillota.</span>
-                            <ul>
-                                <li><strong>Infraestructura y Desarrollo Cloud:</strong> Arquitectura e implementación completa del MVP de la aplicación web progresiva utilizando <strong>FlutterFlow</strong> y <strong>Firebase</strong>. Gestión de servicios en <strong>Google Cloud Platform</strong> e integración técnica de <strong>Google Maps API</strong> para funcionalidades de geolocalización y mapas interactivos.</li>
-                                <li><strong>Tecnologías Inmersivas:</strong> Modelado 3D en <strong>Blender</strong> e integración de experiencias de Realidad Aumentada para la puesta en valor del patrimonio natural in situ.</li>
-                                <li><strong>Diseño Integral:</strong> Lideré todo el ciclo de diseño, desde la creación de la marca hasta la interfaz visual final de la aplicación.</li>
-                            </ul>
-                        </article>
-
-                        <article class="cyber-card shine-effect">
-                            <div class="card-header">
-                                <div>
-                                    <div class="project-title">Kuifi (App Ride-Hailing)</div>
-                                    <span class="role-tag">Coordinador de Producto Digital</span>
-                                </div>
-                                <span class="status-badge">MVP Validado</span>
-                            </div>
-                            <span class="job-meta">MVP de aplicación de transporte tipo Uber/Cabify con enfoque en seguridad.</span>
-                            <ul>
-                                <li><strong>Seguridad Avanzada:</strong> Integración de métodos de <strong>reconocimiento facial</strong> y <strong>PIN de seguridad</strong> para validación de identidad de conductores y pasajeros.</li>
-                                <li><strong>Geolocalización y Pagos:</strong> Implementación técnica de <strong>Google Maps API</strong> para trazado de rutas/coordenadas y pasarelas de pago integradas.</li>
-                                <li><strong>Hito Logrado:</strong> Se completó el desarrollo del MVP funcional y se ejecutaron las primeras <strong>Pruebas de Usuario (User Testing)</strong> exitosas en entorno real.</li>
-                            </ul>
-                        </article>
-                    </div>
-                </div>
-            </section>
-
-            <section id="experience">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">03</span>
-                        <h2 class="shine-effect">Experiencia Laboral</h2>
-                    </div>
-
-                    <div class="exp-grid">
-                        <div class="exp-item">
-                            <div class="exp-title">Consultor de Soluciones Digitales y Webmaster <span class="exp-company">// Ferco-Re</span> <span class="exp-date">2025 - Actualidad</span></div>
-                            <ul>
-                                <li><strong>Desarrollo de Software a Medida:</strong> Diseño y construcción de una aplicación web personalizada para la automatización de la gestión interna y reportabilidad de la empresa.</li>
-                                <li><strong>Gestión Web y Datos:</strong> Rol de Webmaster y administración de bases de datos, optimizando la estructuración de la cartera de clientes y mejorando la eficiencia en el acceso a la información crítica.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Gestor de Proyectos y Desarrollador Web <span class="exp-company">// LuzKrudo</span> <span class="exp-date">2025 - Actualidad</span></div>
-                            <ul>
-                                <li>Liderazgo de proyectos digitales enfocados en la convergencia de creatividad y tecnología.</li>
-                                <li>Consultoría en implementación de sitios web y estrategias digitales.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Director Académico y Operativo <span class="exp-company">// OTEC ITI</span> <span class="exp-date">2023 - 2024</span></div>
-                            <ul>
-                                <li>Gestión integral del Organismo Técnico de Capacitación, logrando la certificación bajo la <strong>Norma de Calidad NCh2728</strong>.</li>
-                                <li>Administración de la acreditación y procesos administrativos ante <strong>SENCE</strong>, asegurando el cumplimiento normativo para la ejecución de cursos.</li>
-                                <li>Diseño de estrategias de capacitación tecnológica para empresas.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Docente de Tecnología y Diseño <span class="exp-company">// AIEP</span> <span class="exp-date">2017 - Actualidad</span></div>
-                            <ul>
-                                <li><strong>Docente NABA:</strong> Profesor acreditado por la Nuova Accademia di Belle Arti (Milán, Italia) para la impartición de contenidos académicos internacionales.</li>
-                                <li>Imparto cátedras especializadas en comunicación digital, diseño gráfico y nuevas tecnologías.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Docente de Fotografía <span class="exp-company">// Escuela Alpes (Santiago)</span> <span class="exp-date">2025</span></div>
-                            <ul>
-                                <li>Formación especializada en técnica fotográfica y lenguaje visual para estudiantes de la carrera profesional.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Editor Fotográfico y Gestor de Contenidos <span class="exp-company">// Revista Biográfica</span> <span class="exp-date">2017 - Actualidad</span></div>
-                            <ul>
-                                <li>Gestión editorial de un proyecto de alto impacto cultural, financiado mediante la adjudicación de <strong>Fondart Nacional</strong> (Ministerio de las Culturas, las Artes y el Patrimonio).</li>
-                                <li>Responsable de la edición y producción de 16 números, coordinando la impresión y distribución de un total de 16.000 ejemplares.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Realizador Audiovisual y Director de Fotografía <span class="exp-company">// Independiente</span></div>
-                            <ul>
-                                <li><strong>Web Serie "Encubierto" (2020):</strong> <strong>Director de Fotografía</strong> — responsable de la dirección visual, concepto de iluminación y dirección técnica de cámara de la serie.</li>
-                                <li><strong>Festival Internacional de Cine de Puerto Montt:</strong> Dirección y realización del spot oficial del primer certamen.</li>
-                                <li><strong>Temporales Internacionales de Teatro de Puerto Montt:</strong> Realización del spot oficial para el evento cultural.</li>
-                            </ul>
-                        </div>
-
-                        <div class="exp-item">
-                            <div class="exp-title">Fotógrafo Profesional <span class="exp-company">// Revista Clubs & Countries (Buenos Aires)</span> <span class="exp-date">2007 - 2008</span></div>
-                            <ul>
-                                <li>Trabajo como fotógrafo profesional para la publicación editorial.</li>
-                                <li><strong>Asistente encargado de iluminación</strong> para producciones de medios internacionales como Rolling Stone y Fashion TV Latinoamérica.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="awards">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">04</span>
-                        <h2 class="shine-effect">Reconocimiento</h2>
-                    </div>
-                    <div class="award-box">
-                        <i data-feather="award" width="48" style="color:var(--neon-pink);"></i>
-                        <div>
-                            <h3 style="font-size:1.4rem; color:var(--neon-pink); text-transform:uppercase; margin-bottom:5px;">Primer Lugar - Concurso Nacional de Fotografía (2010)</h3>
-                            <p style="margin:0; color:var(--text-body);">Otorgado por el Gobierno de Chile y el Ministerio de las Culturas. Reconocimiento oficial en conmemoración del Día Nacional de la Fotografía, en certamen organizado en conjunto con el Foto Cine Club de Valparaíso.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="education">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">05</span>
-                        <h2 class="shine-effect">Educación y Certificaciones</h2>
-                    </div>
-
-                    <h3 class="edu-section-title">Formación Académica y Profesional</h3>
-                    <div class="edu-grid-major">
-                        <div class="edu-card-major">
-                            <h3>Desarrollador Full Stack</h3>
-                            <span>Bootcamp Universidad del Desarrollo</span>
-                        </div>
-                        <div class="edu-card-major">
-                            <h3>Diplomado Gestión Ágil</h3>
-                            <span>Universidad de Playa Ancha</span>
-                        </div>
-                        <div class="edu-card-major">
-                            <h3>Diplomado Docencia Vocacional</h3>
-                            <span>DUOC UC</span>
-                        </div>
-                        <div class="edu-card-major">
-                            <h3>Fotografía Profesional</h3>
-                            <span>Escuela Motivarte (Buenos Aires)</span>
-                        </div>
-
-                    </div>
-
-                    <h3 class="edu-section-title">Certificaciones y Cursos</h3>
-                    <div class="edu-grid-minor">
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i>
+                
+                <div class="project-grid">
+                    <article class="cyber-card shine-effect">
+                        <div class="card-header">
                             <div>
-                                <span style="font-weight:600; display:block;">Diseño Gráfico y Dirección de Arte — NABA Milano</span>
-                                <span style="color:#94a3b8; font-size:0.85rem;">Nuova Accademia di Belle Arti · AIEP / U. Andrés Bello · 2024–2025<br>Imagen Impresa · Imagen Digital · Diseño de la Comunicación · Space Design · Diseño de Empaque · Brand Design</span>
+                                <div class="project-title">Museo Urbano Mayaca (MUM)</div>
+                                <span class="role-tag">Líder Técnico y Creativo</span>
                             </div>
+                            <span class="status-badge">MVP Offline</span>
                         </div>
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i> <span>Claude Code in Action — Anthropic</span>
+                        <span class="job-meta">Desarrollo de ecosistema digital y MVP por encargo institucional de AIEP y la I. Municipalidad de Quillota.</span>
+                        <ul>
+                            <li><strong>Infraestructura y Desarrollo Cloud:</strong> Arquitectura e implementación completa del MVP de la aplicación web progresiva utilizando <strong>FlutterFlow</strong> y <strong>Firebase</strong>. Gestión de servicios en <strong>Google Cloud Platform</strong> e integración técnica de <strong>Google Maps API</strong> para funcionalidades de geolocalización y mapas interactivos.</li>
+                            <li><strong>Tecnologías Inmersivas:</strong> Modelado 3D en <strong>Blender</strong> e integración de experiencias de Realidad Aumentada para la puesta en valor del patrimonio natural in situ.</li>
+                            <li><strong>Diseño Integral:</strong> Lideré todo el ciclo de diseño, desde la creación de la marca hasta la interfaz visual final de la aplicación.</li>
+                        </ul>
+                    </article>
+
+                    <article class="cyber-card shine-effect">
+                        <div class="card-header">
+                            <div>
+                                <div class="project-title">Kuifi (App Ride-Hailing)</div>
+                                <span class="role-tag">Coordinador de Producto Digital</span>
+                            </div>
+                            <span class="status-badge">MVP Validado</span>
                         </div>
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i> <span>Fundamentos IA Generativa (Microsoft & LinkedIn)</span>
+                        <span class="job-meta">MVP de aplicación de transporte tipo Uber/Cabify con enfoque en seguridad.</span>
+                        <ul>
+                            <li><strong>Seguridad Avanzada:</strong> Integración de métodos de <strong>reconocimiento facial</strong> y <strong>PIN de seguridad</strong> para validación de identidad de conductores y pasajeros.</li>
+                            <li><strong>Geolocalización y Pagos:</strong> Implementación técnica de <strong>integración de APIs</strong> para trazado de rutas/coordenadas y pasarelas de pago integradas.</li>
+                            <li><strong>Hito Logrado:</strong> Se completó el desarrollo del MVP funcional y se ejecutaron las primeras <strong>Pruebas de Usuario (User Testing)</strong> exitosas en entorno real.</li>
+                        </ul>
+                    </article>
+
+                    <article class="cyber-card shine-effect">
+                        <div class="card-header">
+                            <div>
+                                <div class="project-title">Laboratorio de Marketing — LuzKrudo</div>
+                                <span class="role-tag">Diseño de Estrategia + Desarrollo de Herramientas</span>
+                            </div>
+                            <span class="status-badge">Live</span>
                         </div>
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i> <span>Diseño UX/UI + Figma (Udemy)</span>
+                        <span class="job-meta">Dos herramientas interactivas gratuitas para pymes y emprendedores. Diseñadas para ordenar ideas antes de invertir en marketing.</span>
+                        <ul>
+                            <li><strong>Define tu Mercado Objetivo:</strong> 9 preguntas que generan un perfil orientativo de cliente ideal. Sin registro, resultado inmediato.</li>
+                            <li><strong>Estratega Digital:</strong> 7 preguntas que recomiendan en qué red concentrarse y qué tipo de contenido priorizar según el negocio.</li>
+                        </ul>
+                        <div style="margin-top:16px;">
+                            <a href="https://luzkrudo.cl/lab-marketing/" target="_blank" class="contact-btn btn-web" style="display:inline-flex; padding:10px 20px; font-size:0.9rem;">
+                                <i data-feather="external-link" width="15"></i> Ver herramientas
+                            </a>
                         </div>
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i> <span>Comercio Electrónico y Mkt Digital (SENCE)</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">03</span>
+                    <h2 class="shine-effect">Experiencia Laboral</h2>
+                </div>
+
+                <div class="exp-grid">
+                    <div class="exp-item">
+                        <div class="exp-title">Consultor de Soluciones Digitales y Webmaster <span class="exp-company">// Ferco-Re</span> <span class="exp-date">2025 - Actualidad</span></div>
+                        <ul>
+                            <li><strong>Desarrollo de Software a Medida:</strong> Diseño y construcción de una aplicación web personalizada para la automatización de la gestión interna y reportabilidad de la empresa.</li>
+                            <li><strong>Gestión Web y Datos:</strong> Webmaster y administración de bases de datos para la estructuración de la cartera de clientes y gestión de pólizas.</li>
+                            <li><strong>Campaña AquaSur 2026:</strong> Producción de landing de captación de leads, artículo técnico PDF para posicionamiento en el sector acuícola y scripts de cápsulas de contenido para LinkedIn.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Gestor de Proyectos y Desarrollador Web <span class="exp-company">// LuzKrudo</span> <span class="exp-date">2025 - Actualidad</span></div>
+                        <ul>
+                            <li><strong>Estrategia y gestión de canales digitales:</strong> Planificación y ejecución de contenido orgánico orientado a conversión, con foco en formatos de alto alcance y construcción de embudo desde redes sociales.</li>
+                            <li><strong>Laboratorio de Marketing:</strong> Diseño y desarrollo de herramientas interactivas para que pymes tomen mejores decisiones antes de invertir en marketing.</li>
+                            <li><strong>Consultoría digital:</strong> Implementación de sitios web y estrategias digitales para clientes de distintos sectores.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Director Académico y Operativo <span class="exp-company">// OTEC ITI</span> <span class="exp-date">2023 - 2024</span></div>
+                        <ul>
+                            <li>Gestión integral del Organismo Técnico de Capacitación, logrando la certificación bajo la <strong>Norma de Calidad NCh2728</strong>.</li>
+                            <li>Administración de la acreditación y procesos administrativos ante <strong>SENCE</strong>, asegurando el cumplimiento normativo para la ejecución de cursos.</li>
+                            <li>Diseño de estrategias de capacitación tecnológica para empresas.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Docente de Tecnología y Diseño <span class="exp-company">// AIEP</span> <span class="exp-date">2017 - Actualidad</span></div>
+                        <ul>
+                            <li><strong>Docente NABA:</strong> Profesor acreditado por la Nuova Accademia di Belle Arti (Milán, Italia) para la impartición de contenidos académicos internacionales.</li>
+                            <li>Imparto cátedras especializadas en comunicación digital, diseño gráfico y nuevas tecnologías.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Docente de Fotografía y Marketing Digital <span class="exp-company">// CFT Alpes</span> <span class="exp-date">2025</span></div>
+                        <ul>
+                            <li>Formación especializada en técnica fotográfica y lenguaje visual para estudiantes de la carrera profesional.</li>
+                            <li><strong>Marketing Digital I:</strong> Diseño curricular y docencia del módulo completo, desde estrategia de canales hasta analítica y pauta pagada.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Editor Fotográfico y Gestor de Contenidos <span class="exp-company">// Revista Biográfica</span> <span class="exp-date">2017 - Actualidad</span></div>
+                        <ul>
+                            <li>Gestión editorial de un proyecto de alto impacto cultural, financiado mediante la adjudicación de <strong>Fondart Nacional</strong> (Ministerio de las Culturas, las Artes y el Patrimonio).</li>
+                            <li>Responsable de la edición y producción de 16 números, coordinando la impresión y distribución de un total de 16.000 ejemplares.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Realizador Audiovisual y Director de Fotografía <span class="exp-company">// Independiente</span></div>
+                        <ul>
+                            <li><strong>Web Serie "Encubierto" (2020):</strong> <strong>Director de Fotografía</strong> — responsable de la dirección visual, concepto de iluminación y dirección técnica de cámara de la serie.</li>
+                            <li><strong>Festival Internacional de Cine de Puerto Montt:</strong> Dirección y realización del spot oficial del primer certamen.</li>
+                            <li><strong>Temporales Internacionales de Teatro de Puerto Montt:</strong> Realización del spot oficial para el evento cultural.</li>
+                        </ul>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-title">Fotógrafo Profesional <span class="exp-company">// Revista Clubs & Countries (Buenos Aires)</span> <span class="exp-date">2007 - 2008</span></div>
+                        <ul>
+                            <li>Trabajo como fotógrafo profesional para la publicación editorial.</li>
+                            <li><strong>Asistente encargado de iluminación</strong> para producciones de medios internacionales como Rolling Stone y Fashion TV Latinoamérica.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="awards">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">04</span>
+                    <h2 class="shine-effect">Reconocimiento</h2>
+                </div>
+                <div class="award-box">
+                    <i data-feather="award" width="48" style="color:var(--neon-pink);"></i>
+                    <div>
+                        <h3 style="font-size:1.4rem; color:var(--neon-pink); text-transform:uppercase; margin-bottom:5px;">Primer Lugar - Concurso Nacional de Fotografía (2010)</h3>
+                        <p style="margin:0; color:var(--text-body);">Otorgado por el Gobierno de Chile y el Ministerio de las Culturas. Reconocimiento oficial en conmemoración del Día Nacional de la Fotografía, en certamen organizado en conjunto con el Foto Cine Club de Valparaíso.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">05</span>
+                    <h2 class="shine-effect">Educación y Certificaciones</h2>
+                </div>
+
+                <h3 class="edu-section-title">Formación Académica y Profesional</h3>
+                <div class="edu-grid-major">
+                    <div class="edu-card-major">
+                        <h3>Desarrollador Full Stack</h3>
+                        <span>Bootcamp · Universidad del Desarrollo</span>
+                        <p style="margin-top:12px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Formación intensiva en desarrollo web completo. Stack MERN (MongoDB, Express, React, Node.js), arquitectura de APIs REST, bases de datos relacionales y no relacionales, y despliegue en producción. Base técnica directa de los proyectos de desarrollo que ejecuto hoy.</p>
+                    </div>
+                    <div class="edu-card-major">
+                        <h3>Diplomado Gestión Ágil</h3>
+                        <span>Universidad de Playa Ancha</span>
+                        <p style="margin-top:12px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Certificación en marcos de trabajo ágiles aplicados a proyectos digitales. Scrum, Kanban, planificación de sprints y gestión iterativa de equipos. Metodología que aplico en la dirección de MVPs y proyectos con múltiples stakeholders.</p>
+                    </div>
+                    <div class="edu-card-major">
+                        <h3>Diplomado Docencia Vocacional</h3>
+                        <span>DUOC UC</span>
+                        <p style="margin-top:12px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Formación pedagógica especializada en educación técnico-profesional. Diseño curricular, evaluación por competencias y metodologías de enseñanza para adultos. Respaldo formal de mi rol docente en AIEP y CFT Alpes.</p>
+                    </div>
+                    <div class="edu-card-major">
+                        <h3>Fotografía Profesional</h3>
+                        <span>Escuela Motivarte · Buenos Aires</span>
+                        <p style="margin-top:12px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Formación técnica y estética avanzada en fotografía profesional. Iluminación de estudio, dirección de arte, fotografía editorial y lenguaje visual para medios impresos y digitales. Complementada con experiencia real en producción para Rolling Stone y Fashion TV Latinoamérica.</p>
+                    </div>
+                </div>
+
+                <h3 class="edu-section-title">Certificaciones y Cursos</h3>
+                <div class="edu-grid-minor">
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Diseño Gráfico y Dirección de Arte — NABA Milano</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">Nuova Accademia di Belle Arti · AIEP / U. Andrés Bello · 2024–2025</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Programa internacional de la academia de arte más prestigiosa de Italia, cursado a través de la alianza AIEP/UAB. 6 módulos completados: Imagen Impresa, Imagen Digital, Diseño de la Comunicación, Space Design, Diseño de Empaque y Brand Design. Aporta fundamento teórico y estético de nivel europeo a toda mi producción visual.</p>
                         </div>
-                        <div class="edu-chip">
-                            <i data-feather="check-circle"></i> <span>Design Thinking (UPLA)</span>
+                    </div>
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Claude Code in Action — Anthropic</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">Anthropic · 2025</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Certificación oficial en el uso profesional de Claude como herramienta de desarrollo. Automatización de flujos de trabajo con IA, construcción de agentes de código e integración de la API de Anthropic en proyectos reales. Uso activo en todos mis proyectos actuales.</p>
+                        </div>
+                    </div>
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Fundamentos de IA Generativa</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">Microsoft & LinkedIn Learning</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Comprensión estructural de modelos de lenguaje, casos de uso empresariales y aplicación práctica de herramientas de IA generativa. Base conceptual que permite tomar decisiones informadas sobre qué herramientas y enfoques de IA integrar en cada proyecto.</p>
+                        </div>
+                    </div>
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Diseño UX/UI + Figma</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">Udemy</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Metodología de diseño centrado en el usuario, wireframing, prototipado interactivo y sistemas de diseño con Figma. Aplicado directamente al diseño de interfaces de los MVPs y productos digitales que desarrollo, asegurando coherencia visual y usabilidad.</p>
+                        </div>
+                    </div>
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Comercio Electrónico y Marketing Digital</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">SENCE</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Estrategias de marketing digital, gestión de canales digitales, publicidad pagada (SEM/Social Ads), analítica web, SEO y diseño de campañas orientadas a conversión. Formación que sustenta los servicios de marketing digital que ofrezco a través de LuzKrudo.</p>
+                        </div>
+                    </div>
+                    <div class="edu-chip">
+                        <i data-feather="check-circle"></i>
+                        <div>
+                            <span style="font-weight:600; display:block;">Design Thinking</span>
+                            <span style="color:#94a3b8; font-size:0.85rem;">Universidad de Playa Ancha</span>
+                            <p style="margin-top:8px; font-size:0.9rem; color:#94a3b8; line-height:1.6;">Metodología de innovación centrada en el usuario para la resolución de problemas complejos. Fases de empatía, definición, ideación, prototipado y testeo. Marco de trabajo que aplico en la etapa de diagnóstico y conceptualización de todos mis proyectos digitales.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            <section id="skills">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">06</span>
-                        <h2 class="shine-effect">Habilidades y Herramientas</h2>
-                    </div>
-                    <div class="skills-container">
-                        <span class="skill-tag">[ React ]</span>
-                        <span class="skill-tag">[ Vite ]</span>
-                        <span class="skill-tag">[ Node.js ]</span>
-                        <span class="skill-tag">[ WordPress ]</span>
-                        <span class="skill-tag">[ FlutterFlow ]</span>
-                        <span class="skill-tag">[ Firebase ]</span>
-                        <span class="skill-tag">[ Google Cloud ]</span>
-                        <span class="skill-tag">[ Google Maps API ]</span>
-                        <span class="skill-tag">[ Git/GitHub ]</span>
-                        <span class="skill-tag">[ Claude AI ]</span>
-                        <span class="skill-tag">[ IA Generativa ]</span>
-                        <span class="skill-tag">[ Blender 3D ]</span>
-                        <span class="skill-tag">[ Adobe CC ]</span>
-                        <span class="skill-tag">[ Figma ]</span>
-                        <span class="skill-tag">[ Gestión Ágil ]</span>
-                        <span class="skill-tag">[ Calidad NCh2728 ]</span>
-                        <span class="skill-tag">[ Fondart ]</span>
-                    </div>
+            </div>
+        </section>
+        
+        <section id="skills">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">06</span>
+                    <h2 class="shine-effect">Habilidades y Herramientas</h2>
                 </div>
-            </section>
-
-            <section id="contact">
-                <div class="section-content">
-                    <div class="section-header">
-                        <span class="section-number">07</span>
-                        <h2 class="shine-effect">Contacto</h2>
-                    </div>
-                    <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
-                        <div style="color:#94a3b8; font-size:1rem; margin-right:10px;">
-                            <div style="margin-bottom:8px;"><strong>+56 9 6579 8851</strong></div>
-                            <div>jferrandp@gmail.com</div>
-                        </div>
-                        <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp" style="min-width:160px;">
-                            <i data-feather="message-circle" width="18"></i> WhatsApp
-                        </a>
-                        <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin" style="min-width:160px;">
-                            <i data-feather="linkedin" width="18"></i> LinkedIn
-                        </a>
-                        <a href="https://www.luzkrudo.cl" target="_blank" class="contact-btn btn-web" style="min-width:160px;">
-                            <i data-feather="globe" width="18"></i> Portafolio
-                        </a>
-                    </div>
+                <h3 style="font-family:'Rajdhani',sans-serif; color:var(--text-main); font-size:1.2rem; text-transform:uppercase; letter-spacing:1px; border-bottom:1px dashed var(--border-color); padding-bottom:10px; margin-bottom:20px;">Stack Técnico</h3>
+                <div class="skills-container">
+                    <span class="skill-tag">[ React ]</span>
+                    <span class="skill-tag">[ Vite ]</span>
+                    <span class="skill-tag">[ Node.js ]</span>
+                    <span class="skill-tag">[ WordPress ]</span>
+                    <span class="skill-tag">[ FlutterFlow ]</span>
+                    <span class="skill-tag">[ Firebase ]</span>
+                    <span class="skill-tag">[ Google Cloud ]</span>
+                    <span class="skill-tag">[ Integración de APIs ]</span>
+                    <span class="skill-tag">[ Git/GitHub ]</span>
+                    <span class="skill-tag">[ Claude AI ]</span>
+                    <span class="skill-tag">[ IA Generativa ]</span>
+                    <span class="skill-tag">[ Blender 3D ]</span>
+                    <span class="skill-tag">[ Adobe CC ]</span>
+                    <span class="skill-tag">[ Figma ]</span>
+                    <span class="skill-tag">[ Gestión Ágil ]</span>
+                    <span class="skill-tag">[ Calidad NCh2728 ]</span>
+                    <span class="skill-tag">[ Fondart ]</span>
+                    <span class="skill-tag">[ Google Analytics ]</span>
+                    <span class="skill-tag">[ Google Tag Manager ]</span>
                 </div>
-            </section>
+                <h3 style="font-family:'Rajdhani',sans-serif; color:var(--text-main); font-size:1.2rem; text-transform:uppercase; letter-spacing:1px; border-bottom:1px dashed var(--border-color); padding-bottom:10px; margin:30px 0 20px 0;">Marketing Digital</h3>
+                <div class="skills-container">
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ Estrategia de Contenido ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ Gestión de Redes Sociales ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ Email Marketing ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ SEO On-page ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ Analítica Web ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,0,255,0.4); color:var(--neon-pink); background:rgba(255,0,255,0.05);">[ Publicidad Digital ]</span>
+                </div>
+                <h3 style="font-family:'Rajdhani',sans-serif; color:var(--text-main); font-size:1.2rem; text-transform:uppercase; letter-spacing:1px; border-bottom:1px dashed var(--border-color); padding-bottom:10px; margin:30px 0 20px 0;">Habilidades Blandas</h3>
+                <div class="skills-container">
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Trabajo en Equipo ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Resolución de Problemas ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Comunicación Efectiva ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Liderazgo de Proyectos ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Adaptabilidad ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Docencia y Mentoría ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Dirección Creativa ]</span>
+                    <span class="skill-tag" style="border-color:rgba(255,215,0,0.4); color:var(--neon-gold); background:rgba(255,215,0,0.05);">[ Visión Creativa ]</span>
+                </div>
+            </div>
+        </section>
 
-        </main>
-    </div>
+        <section id="contact">
+            <div class="section-content">
+                <div class="section-header">
+                    <span class="section-number">07</span>
+                    <h2 class="shine-effect">Contacto</h2>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+                    <div style="color:#94a3b8; font-size:1rem; margin-right:10px;">
+                        <div style="margin-bottom:8px;"><strong>+56 9 6579 8851</strong></div>
+                    </div>
+                    <a href="https://wa.me/56965798851" target="_blank" class="contact-btn btn-wsp" style="min-width:160px;">
+                        <i data-feather="message-circle" width="18"></i> WhatsApp
+                    </a>
+                    <a href="mailto:jferrandp@gmail.com" class="contact-btn btn-email" style="min-width:160px;">
+                        <i data-feather="mail" width="18"></i> Correo
+                    </a>
+                    <a href="https://www.linkedin.com/in/javierferrandp" target="_blank" class="contact-btn btn-linkedin" style="min-width:160px;">
+                        <i data-feather="linkedin" width="18"></i> LinkedIn
+                    </a>
+                    <a href="https://luzkrudo.cl/portafolio-2/" target="_blank" class="contact-btn btn-web" style="min-width:160px;">
+                        <i data-feather="globe" width="18"></i> Portafolio
+                    </a>
+                </div>
+            </div>
+        </section>
 
-    <a href="#" class="scroll-top-btn" id="scrollTopBtn">
-        <i data-feather="arrow-up"></i>
-    </a>
+    </main>
+</div>
 
-    <script>
-        feather.replace();
-        const scrollBtn = document.getElementById('scrollTopBtn');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                scrollBtn.classList.add('show');
-            } else {
-                scrollBtn.classList.remove('show');
-            }
-        });
-    </script>
+<a href="#" class="scroll-top-btn" id="scrollTopBtn">
+    <i data-feather="arrow-up"></i>
+</a>
+
+<script>
+    feather.replace();
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.classList.add('show');
+        } else {
+            scrollBtn.classList.remove('show');
+        }
+    });
+</script>
+```
+
 </body>
 </html>
